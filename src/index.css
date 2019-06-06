@@ -11,3 +11,10 @@ body {
 	box-sizing: border-box;
 	min-height: 100vh;
 }
+
+button {
+	border: 1px solid black;
+	background-color: #fff;
+	padding: 1rem;
+	margin: 1rem;
+}
