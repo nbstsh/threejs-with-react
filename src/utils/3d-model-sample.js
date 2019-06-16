@@ -1,8 +1,12 @@
 import * as THREE from 'three';
 import GLTFLoader from 'three-gltf-loader';
 import OrbitControls from 'three-orbitcontrols';
+import FBXLoader from 'three-fbxloader-offical';
 
 const GLTF_MODEL_PATH = '3dmodels/old_guy/scene.gltf';
+const SALAMI_FBX_MODEL_PATH = '3dmodels/salami/salami.fbx';
+const SALAMI_GLB_MODEL_PATH = '3dmodels/salami/salami.glb';
+const SALAMI_OBJ_MODEL_PATH = '3dmodels/salami/salami.obj';
 let scene, renderer, camera, controls, loader, obj3D;
 
 export const init = ref => {
@@ -11,7 +15,8 @@ export const init = ref => {
 	initRenderer(ref);
 	initControls();
 
-	load3Model();
+	// load3Model();
+	loadSalami();
 	generateLight();
 };
 
@@ -31,7 +36,8 @@ const initCamera = () => {
 
 const initRenderer = ref => {
 	renderer = new THREE.WebGLRenderer({ antialias: true });
-	renderer.setClearColor('#eeeeee');
+	// renderer.setClearColor('#eeeeee');
+	renderer.setClearColor('#fff');
 	renderer.setSize(window.innerWidth, window.innerHeight);
 	ref.current.appendChild(renderer.domElement);
 };
@@ -62,10 +68,40 @@ const load3Model = () => {
 	);
 };
 
+const loadSalami = () => {
+	const loader = new FBXLoader();
+	loader.load(SALAMI_FBX_MODEL_PATH, object3d => {
+		scene.add(object3d);
+	});
+	// loader = new THREE.OBJLoader();
+
+	// console.log(typeof THREE.OBJLoader);
+	// OBJLoader(THREE);
+	// console.log(OBJLoader);
+	// console.log(typeof THREE.OBJLoader);
+
+	// loader.load(SALAMI_OBJ_MODEL_PATH, obj => {
+	// 	console.log(obj);
+	// });
+};
+
+const addBox = (positionX = 0, positionY = 0, positionZ = 0) => {
+	const geometry = new THREE.BoxGeometry(1, 1, 1);
+	const material = new THREE.MeshLambertMaterial({ color: 0xffcc00 });
+	const mesh = new THREE.Mesh(geometry, material);
+	mesh.position.set(positionX, positionY, positionZ);
+	// mesh.rotation.set(1, 3, 1);
+	// mesh.scale.set(10, 1, 1);
+	scene.add(mesh);
+};
+
 const generateLight = () => {
 	const light = new THREE.PointLight(0xffffff, 1, 500);
-	light.position.set(10, 0, 25);
+	light.position.set(0, 100, 0);
 	scene.add(light);
+
+	var aLight = new THREE.AmbientLight(0xffffff); // soft white light
+	scene.add(aLight);
 
 	// const dLight = new THREE.DirectionalLight(0xffffff, 100);
 	// dLight.position.set(0, 1, 0);
